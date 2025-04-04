@@ -52,7 +52,7 @@ class LoginController extends GetxController {
         animationDuration: Duration(seconds: 2),
         backgroundColor: AppColors.blueColor,
         messageText: Text(
-          "Connection Restored",
+          "Connection Restored SuxxessFully",
           style: TextStyle(
             color: AppColors.whiteColor,
             fontSize: 14,
