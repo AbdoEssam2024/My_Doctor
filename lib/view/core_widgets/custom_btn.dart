@@ -17,6 +17,7 @@ class CustomBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
+      elevation: 0,
       padding: EdgeInsets.symmetric(
         vertical: ScreenSize.screenWidth! * 0.03,
         horizontal: ScreenSize.screenWidth! * 0.2,

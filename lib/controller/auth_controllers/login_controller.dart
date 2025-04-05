@@ -1,108 +1,63 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/get_navigation.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/instance_manager.dart';
+import 'package:get/get.dart';
+import 'package:my_doctor/const/class/internet_service.dart';
 import 'package:my_doctor/const/class/request_state.dart';
 import 'package:my_doctor/const/colors/app_colors.dart';
 import 'package:my_doctor/const/routes/routes_names.dart';
+import 'package:my_doctor/main.dart';
 import 'package:my_doctor/model/user_data_model.dart';
-import 'package:my_doctor/repo/user_data.dart';
+import 'package:my_doctor/repo/auth_repo/login_data.dart';
+import 'package:my_doctor/view/core_widgets/custom_snack_bar.dart';
 
 class LoginController extends GetxController {
   late TextEditingController emailController;
   late TextEditingController passwordController;
-  UserData userData = UserData(apiCalls: Get.find());
+  LoginUserData userData = LoginUserData(apiCalls: Get.find());
   List<UserDataModel> userDataList = [];
-  RequestState requestState = RequestState.none;
+  Rx<RequestState> requestState = RequestState.none.obs;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool showPass = true;
-  Connectivity connectivity = Connectivity();
-
-  updateConnectionStatus(List<ConnectivityResult> connectivityResultList) {
-    if (connectivityResultList.contains(ConnectivityResult.none)) {
-      requestState = RequestState.offline;
-      Get.snackbar(
-        "",
-        "",
-        animationDuration: Duration(seconds: 2),
-        backgroundColor: Colors.red,
-        messageText: Text(
-          "No Internet Connection",
-          style: TextStyle(
-            color: AppColors.whiteColor,
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        titleText: Text(
-          "Disconnected",
-          style: TextStyle(
-            color: AppColors.whiteColor,
-            fontSize: 18,
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-      );
-    } else {
-      requestState = RequestState.online;
-      Get.snackbar(
-        "",
-        "",
-        animationDuration: Duration(seconds: 2),
-        backgroundColor: AppColors.blueColor,
-        messageText: Text(
-          "Connection Restored SuxxessFully",
-          style: TextStyle(
-            color: AppColors.whiteColor,
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        titleText: Text(
-          "Connected",
-          style: TextStyle(
-            color: AppColors.whiteColor,
-            fontSize: 18,
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-      );
-    }
-    update();
-  }
-
-  initConnectivity() {
-    connectivity.onConnectivityChanged.listen(updateConnectionStatus);
-  }
 
   loginFunc() async {
     if (formKey.currentState!.validate()) {
-      if (requestState == RequestState.online) {
-        requestState = RequestState.loading;
+      listenToNetworkChanges();
+      if (requestState.value == RequestState.online) {
+        requestState.value = RequestState.loading;
         List data = [];
         var response = await userData.getUserData(
           email: emailController.text,
           password: passwordController.text,
         );
-
         if (response is RequestState) {
-          requestState = response;
+          requestState.value = response;
         } else {
-          data.add(response);
-
-          userDataList =
-              data.map((user) => UserDataModel.fromJson(user)).toList();
-
-          requestState = RequestState.success;
-
-          Get.offNamed(AppRoutesNames.homeScreen, arguments: userDataList);
+          loginSuccess(data: data, response: response);
         }
       } else {
-        requestState = RequestState.offline;
+        requestState.value = RequestState.offline;
       }
+      update();
     }
-    update();
+  }
+
+  loginSuccess({required List data, required var response}) {
+    if (response['status'] == "success") {
+      data.add(response['data']);
+      userDataList = data.map((user) => UserDataModel.fromJson(user)).toList();
+      requestState.value = RequestState.success;
+      sharedPreferences.setInt("visit", 2);
+      sharedPreferences.setString("name", userDataList[0].userName!);
+      Get.offNamed(AppRoutesNames.homeScreen, arguments: {
+        "userData": userDataList,
+      });
+    } else {
+      snackBarWidget(
+        title: response['status'],
+        message: response['message'],
+        backgroundColor: AppColors.redColor,
+      );
+      requestState.value = RequestState.success;
+    }
   }
 
   toggleShowPass() {
@@ -114,9 +69,22 @@ class LoginController extends GetxController {
     Get.offNamed(AppRoutesNames.signupScreen);
   }
 
+  goToForgetPasswordPage() {
+    Get.offNamed(AppRoutesNames.forgotPasswordScreen);
+  }
+
+  listenToNetworkChanges() {
+    ever(InternetService.requestState, (state) {
+      requestState.value = state;
+      update();
+    });
+    requestState.value = InternetService.requestState.value;
+  }
+
   initControllers() {
     emailController = TextEditingController();
     passwordController = TextEditingController();
+    listenToNetworkChanges();
   }
 
   disposeControllers() {
@@ -126,9 +94,8 @@ class LoginController extends GetxController {
 
   @override
   void onInit() {
-    initConnectivity();
-    initControllers();
     super.onInit();
+    initControllers();
   }
 
   @override

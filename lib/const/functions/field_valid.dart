@@ -1,7 +1,7 @@
 import 'package:get/get_utils/get_utils.dart';
 
 validFields({
-  required String val, // Allow val to be nullable
+  required String val,
   required String type,
   required String fieldName,
   required int minVal,
@@ -33,7 +33,7 @@ validFields({
       break;
 
     case "name":
-      if (!GetUtils.isAlphabetOnly(val)) {
+      if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(val)) {
         return "Please enter a valid $fieldName.";
       }
       break;

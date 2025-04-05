@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:either_dart/either.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_doctor/const/class/request_state.dart';
@@ -15,6 +16,8 @@ class ApiCalls {
       } else {
         return Left(RequestState.failed);
       }
+    } on SocketException {
+      return Left(RequestState.error);
     } catch (e) {
       return Left(RequestState.error);
     }

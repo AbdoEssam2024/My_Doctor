@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/get_navigation.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get.dart';
+import 'package:my_doctor/const/class/internet_service.dart';
+import 'package:my_doctor/const/class/request_state.dart';
+import 'package:my_doctor/const/colors/app_colors.dart';
 import 'package:my_doctor/const/routes/routes_names.dart';
+import 'package:my_doctor/repo/auth_repo/signup_data.dart';
+import 'package:my_doctor/view/core_widgets/custom_snack_bar.dart';
 
 class SignupController extends GetxController {
   late TextEditingController emailController;
@@ -10,14 +13,60 @@ class SignupController extends GetxController {
   late TextEditingController fullNameController;
   late TextEditingController mobileController;
   late TextEditingController birthController;
-  bool showPass = true;
+  late TextEditingController genderController;
+  String selectedGender = "Male";
+  RxBool showPass = true.obs;
 
   GlobalKey<FormState> signUpformKey = GlobalKey<FormState>();
+  Rx<RequestState> requestState = RequestState.none.obs;
 
-  signUpFunc() {
+  SignUpUserData signUpUser = SignUpUserData(apiCalls: Get.find());
+
+  signUpFunc() async {
     if (signUpformKey.currentState!.validate()) {
-      Get.offNamed(AppRoutesNames.loginScreen);
+      listenToNetworkChanges();
+      if (requestState.value == RequestState.online) {
+        requestState.value = RequestState.loading;
+        var response = await signUpUser.signUpUserData(
+          username: fullNameController.text,
+          usermobile: mobileController.text,
+          userbirth: birthController.text,
+          usergender: selectedGender,
+          email: emailController.text,
+          password: passwordController.text,
+        );
+
+        if (response is RequestState) {
+          requestState.value = response;
+        } else {
+          if (response['status'] == "success") {
+            requestState.value = RequestState.success;
+            snackBarWidget(
+              title: 'Success',
+              message: "Your Account Created Successfully",
+              backgroundColor: AppColors.mediumBlueColor,
+            );
+            Get.offNamed(
+              AppRoutesNames.verifyEmailScreen,
+              arguments: {'email': emailController.text},
+            );
+          } else {
+            requestState.value = RequestState.success;
+            snackBarWidget(
+              title: response['status'],
+              message: response['message'],
+              backgroundColor: AppColors.redColor,
+            );
+          }
+        }
+      } else {
+        snackBarWidget(
+          title: 'Error',
+          message: 'You are offline. Please check your internet connection.',
+        );
+      }
     }
+    update();
   }
 
   Future<void> pickDate(
@@ -38,31 +87,50 @@ class SignupController extends GetxController {
   }
 
   toggleShowPass() {
-    showPass = !showPass;
-    update();
+    showPass.value = !showPass.value;
   }
 
   goToLoginScreen() {
     Get.offNamed(AppRoutesNames.loginScreen);
   }
 
-  @override
-  void onInit() {
+  listenToNetworkChanges() {
+    ever(InternetService.requestState, (state) {
+      requestState.value = state;
+      update();
+    });
+    requestState.value = InternetService.requestState.value;
+  }
+
+  initControllers() {
     emailController = TextEditingController();
     passwordController = TextEditingController();
     fullNameController = TextEditingController();
     mobileController = TextEditingController();
     birthController = TextEditingController();
-    super.onInit();
+    genderController = TextEditingController();
+    listenToNetworkChanges();
   }
 
-  @override
-  void onClose() {
+  disposeControllers() {
     emailController.dispose();
     passwordController.dispose();
     fullNameController.dispose();
     mobileController.dispose();
     birthController.dispose();
+    genderController.dispose();
+    super.onClose(); // Added super.onClose() to ensure proper cleanup
+  }
+
+  @override
+  void onInit() {
+    initControllers();
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    disposeControllers();
+    super.onClose();
   }
 }
