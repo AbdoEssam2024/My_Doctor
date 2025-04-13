@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-
+/// A utility class that defines a set of static color constants used throughout
+/// the application for consistent styling. Each color is represented as a
+/// `Color` object with a specific hexadecimal value.
 class AppColors {
   static Color blueColor = Color(0xff2260FF);
   static Color lightBlueColor = Color(0xffCAD6FF);

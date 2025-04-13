@@ -1,3 +1,6 @@
+/// A utility class that provides static paths to various image and animation assets
+/// used in the application. The paths are organized into categories such as splash,
+/// authentication, home, and lottie animations.
 class AppImages {
   static String splashPath = "assets/images/splash/";
   static String splashLogo = "${splashPath}splash_logo.png";

@@ -4,7 +4,7 @@ import 'package:my_doctor/const/class/internet_service.dart';
 import 'package:my_doctor/const/class/request_state.dart';
 import 'package:my_doctor/const/colors/app_colors.dart';
 import 'package:my_doctor/const/routes/routes_names.dart';
-import 'package:my_doctor/repo/auth_repo/signup_data.dart';
+import 'package:my_doctor/repo/remote_data/auth_repo/signup_data.dart';
 import 'package:my_doctor/view/core_widgets/custom_snack_bar.dart';
 
 class SignupController extends GetxController {

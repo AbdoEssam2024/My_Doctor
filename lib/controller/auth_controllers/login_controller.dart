@@ -6,7 +6,7 @@ import 'package:my_doctor/const/colors/app_colors.dart';
 import 'package:my_doctor/const/routes/routes_names.dart';
 import 'package:my_doctor/main.dart';
 import 'package:my_doctor/model/user_data_model.dart';
-import 'package:my_doctor/repo/auth_repo/login_data.dart';
+import 'package:my_doctor/repo/remote_data/auth_repo/login_data.dart';
 import 'package:my_doctor/view/core_widgets/custom_snack_bar.dart';
 
 class LoginController extends GetxController {
@@ -43,13 +43,14 @@ class LoginController extends GetxController {
   loginSuccess({required List data, required var response}) {
     if (response['status'] == "success") {
       data.add(response['data']);
+      userDataBox.put("userData", data[0]);
       userDataList = data.map((user) => UserDataModel.fromJson(user)).toList();
       requestState.value = RequestState.success;
-      sharedPreferences.setInt("visit", 2);
-      sharedPreferences.setString("name", userDataList[0].userName!);
-      Get.offNamed(AppRoutesNames.homeScreen, arguments: {
-        "userData": userDataList,
-      });
+      userDataBox.put("visit", 2);
+      Get.offNamed(
+        AppRoutesNames.homeScreen,
+        arguments: {"userData": userDataList},
+      );
     } else {
       snackBarWidget(
         title: response['status'],

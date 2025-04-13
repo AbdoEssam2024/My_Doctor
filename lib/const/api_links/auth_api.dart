@@ -1,3 +1,8 @@
+/// A class containing static URLs for authentication-related API endpoints.
+/// 
+/// This class provides static string variables that represent the base URL
+/// and specific endpoints for login, sign-up, verification, and password
+/// reset functionalities.
 class AuthApi {
   static String baseUrl = "http://mydoctor-shop.onlinewebshop.net/auth/";
   static String loginApi = "${baseUrl}login.php";

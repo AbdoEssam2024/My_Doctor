@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:my_doctor/const/class/init_binding.dart';
 import 'package:my_doctor/const/routes/routes.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-late SharedPreferences sharedPreferences;
+late Box userDataBox;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Initialize SharedPreferences
-  sharedPreferences = await SharedPreferences.getInstance();
-
+  await Hive.initFlutter();
+  userDataBox = await Hive.openBox("userData");
   runApp(const MyApp());
 }
 

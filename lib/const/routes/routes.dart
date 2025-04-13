@@ -11,7 +11,24 @@ import 'package:my_doctor/view/screen/auth_screens/login_screen.dart';
 import 'package:my_doctor/view/screen/auth_screens/signup_screen.dart';
 import 'package:my_doctor/view/screen/intro_screens/splash_screen.dart';
 import 'package:my_doctor/view/screen/intro_screens/welcome_screen.dart';
-
+/// This file defines the application's route configuration using the GetX package.
+/// 
+/// It imports necessary screens and middleware, and sets up a list of `GetPage`
+/// objects, each representing a route in the application. Each route is associated
+/// with a specific screen and, optionally, middleware for handling route-specific
+/// logic.
+/// 
+/// The routes include:
+/// - SplashScreen with middleware for initial loading.
+/// - WelcomeScreen for welcoming users.
+/// - LoginScreen for user authentication.
+/// - SignupScreen for new user registration.
+/// - HomePage as the main application screen.
+/// - VerifyEmail for email verification during signup.
+/// - SuccessSignup to indicate successful registration.
+/// - ForgetPassword for password recovery initiation.
+/// - VerifyResetPw for verifying password reset requests.
+/// - ResetPassword for setting a new password after verification.
 List<GetPage<dynamic>> routes = [
   GetPage(
     name: AppRoutesNames.splashScreen,
