@@ -1,5 +1,8 @@
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:flutter/material.dart';
 import 'package:my_doctor/const/images/app_images.dart';
 import 'package:my_doctor/model/home_models/overview_model.dart';
+import 'package:my_doctor/view/screen/home_screen/widgets/custom_bottom_bar.dart';
 
 List<TimesOverViewModel> timesOverViewData = [
   TimesOverViewModel(date: "9", day: "Monday", available: false),
@@ -44,21 +47,21 @@ List<AvailableDoctorsModel> availaibleDoctorsData = [
 
 List<TopRatingDoctorsModel> topRatingDoctorsData = [
   TopRatingDoctorsModel(
-    name: "Dr. Olivia Turner, M.D.",
+    name: "Dr. Olivia Turner",
     specialization: "Dermato-Endocrinology",
     imagePath: AppImages.doctorOne,
     rating: "4.5",
     isFavourite: false,
   ),
   TopRatingDoctorsModel(
-    name: "Dr. Alexander Bennett, Ph.D.",
+    name: "Dr. Alexander Bennett",
     specialization: "Dermato-Genetics",
     imagePath: AppImages.doctorTwo,
     rating: "4.7",
     isFavourite: true,
   ),
   TopRatingDoctorsModel(
-    name: "Dr. Sophia Martinez, Ph.D.",
+    name: "Dr. Sophia Martinez",
     specialization: "Cosmetic Bioengineering",
     imagePath: AppImages.doctorThree,
     rating: "4.8",
@@ -66,10 +69,23 @@ List<TopRatingDoctorsModel> topRatingDoctorsData = [
   ),
 
   TopRatingDoctorsModel(
-    name: "Dr. Michael Davidson, M.D.",
+    name: "Dr. Michael Davidson",
     specialization: "Nano-Dermatology",
     imagePath: AppImages.doctorFour,
     rating: "4.6",
     isFavourite: true,
+  ),
+];
+
+List<TabItem> bottomBarItems = [
+  TabItem(icon: BottomBarItems(icon: Icons.home), isIconBlend: true),
+  TabItem(
+    icon: BottomBarItems(icon: Icons.messenger_outline_outlined),
+    isIconBlend: true,
+  ),
+  TabItem(icon: BottomBarItems(icon: Icons.person_pin), isIconBlend: true),
+  TabItem(
+    icon: BottomBarItems(icon: Icons.calendar_month_outlined),
+    isIconBlend: true,
   ),
 ];

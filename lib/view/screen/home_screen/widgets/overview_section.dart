@@ -30,7 +30,7 @@ class OverViewSection extends StatelessWidget {
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemBuilder:
-                  (context, index) => customTimesOverViewCard(
+                  (context, index) => _customTimesOverViewCard(
                     date: timesOverViewData[index].date,
                     day: timesOverViewData[index].day.substring(0, 3),
                     backGtoundColor:
@@ -44,17 +44,30 @@ class OverViewSection extends StatelessWidget {
             ),
           ),
 
-          SizedBox(
-            height: ScreenSize.screenHeight! * 0.27,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemBuilder:
-                  (context, index) => customAvailableDoctors(
-                    index: index,
-                    homeController: homeController,
-                  ),
-              itemCount: availaibleDoctorsData.length,
-            ),
+          Column(
+            children: [
+              SizedBox(
+                height: ScreenSize.screenHeight! * 0.27,
+                child: PageView.builder(
+                  controller: homeController.overViewpageController,
+                  onPageChanged: (value) {
+                    homeController.onPageChangedFunction(
+                      value: value,
+                      currentPage: homeController.overViewCurrentIndex,
+                    );
+                  },
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder:
+                      (context, index) => customAvailableDoctors(
+                        index: index,
+                        homeController: homeController,
+                      ),
+                  itemCount: availaibleDoctorsData.length,
+                ),
+              ),
+
+              _customIndicators(),
+            ],
           ),
         ],
       ),
@@ -62,7 +75,39 @@ class OverViewSection extends StatelessWidget {
   }
 }
 
-Widget customTimesOverViewCard({
+Widget _customIndicators() => GetBuilder<HomeController>(
+  builder:
+      (controller) => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        spacing: ScreenSize.screenWidth! * 0.03,
+        children: [
+          ...List.generate(
+            availaibleDoctorsData.length,
+            (index) => GestureDetector(
+              onTap: () => controller.overViewNextPage(index: index),
+              child: AnimatedContainer(
+                margin: EdgeInsets.only(top: ScreenSize.screenHeight! * 0.02),
+                duration: Duration(milliseconds: 900),
+                width:
+                    controller.overViewCurrentIndex == index
+                        ? ScreenSize.screenWidth! * 0.09
+                        : ScreenSize.screenWidth! * 0.02,
+                height: ScreenSize.screenHeight! * 0.01,
+                decoration: BoxDecoration(
+                  color:
+                      controller.overViewCurrentIndex == index
+                          ? AppColors.blueColor
+                          : AppColors.whiteColor,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+);
+
+Widget _customTimesOverViewCard({
   required String date,
   required String day,
 

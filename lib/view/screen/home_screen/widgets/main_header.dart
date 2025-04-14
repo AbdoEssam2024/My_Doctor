@@ -20,7 +20,7 @@ class MainHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
       padding: EdgeInsets.symmetric(horizontal: ScreenSize.screenWidth! * 0.03),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

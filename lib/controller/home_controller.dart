@@ -4,12 +4,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:my_doctor/main.dart';
 import 'package:my_doctor/model/user_data_model.dart';
+import 'package:my_doctor/repo/const_data/home_overview_data.dart';
 import '../const/class/internet_service.dart';
 import '../const/class/request_state.dart';
 
 class HomeController extends GetxController {
   List userData = [];
   late TextEditingController searchController;
+  late PageController overViewpageController;
+  late PageController topRatingpageController;
+  int overViewCurrentIndex = 0;
+  int topRatingDoctorsCurrentIndex = 0;
   Rx<RequestState> requestState = RequestState.none.obs;
   Rx<DateTime> timeNow = DateTime.now().obs;
 
@@ -60,7 +65,42 @@ class HomeController extends GetxController {
   /// - `initActions()`: Initializes necessary actions and controllers.
   initActions() {
     searchController = TextEditingController();
+    overViewpageController = PageController();
+    topRatingpageController = PageController();
     listenToNetworkChanges();
+  }
+
+  /// Updates the current index with the given value and triggers a UI update.
+  ///
+  /// This function is typically used as a callback for page change events
+  /// to keep track of the current page index and refresh the UI accordingly.
+  ///
+  /// [value] The new index value to be set as the current index.
+  onPageChangedFunction({required int value, required currentPage}) {
+    overViewCurrentIndex = value;
+    update();
+  }
+
+  /// Navigates to the next view in the page controller based on the given index.
+  ///
+  /// Updates the `currentIndex` to the provided [index] and animates the
+  /// `pageController` to the new page if the index is within the bounds of
+  /// `availaibleDoctorsData`. The animation duration is set to 500 milliseconds
+  /// with an ease-in-out curve.
+  ///
+  /// [index]: The index of the next view to navigate to.
+  overViewNextPage({required int index}) {
+    overViewCurrentIndex = index;
+    if (overViewCurrentIndex < availaibleDoctorsData.length ) {
+      if (overViewpageController.hasClients) {
+        overViewpageController.animateToPage(
+          overViewCurrentIndex,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
+    }
+    update();
   }
 
   /// - `handlingTimeView()`: Adjusts and formats time for display.
@@ -92,6 +132,8 @@ class HomeController extends GetxController {
   /// - `disposeControllers()`: Disposes of the text editing controller.
   disposeControllers() {
     searchController.dispose();
+    overViewpageController.dispose();
+    topRatingpageController.dispose();
   }
 
   /// - `onInit()`: Called during the initialization of the controller.

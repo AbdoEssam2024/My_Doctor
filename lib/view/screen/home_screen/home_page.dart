@@ -4,10 +4,12 @@ import 'package:my_doctor/const/class/screen_size.dart';
 import 'package:my_doctor/const/colors/app_colors.dart';
 import 'package:my_doctor/controller/home_controller.dart';
 import 'package:my_doctor/view/core_widgets/handling_view.dart';
+import 'package:my_doctor/view/screen/home_screen/widgets/custom_bottom_bar.dart';
 import 'package:my_doctor/view/screen/home_screen/widgets/main_header.dart';
 import 'package:my_doctor/view/screen/home_screen/widgets/overview_section.dart';
-import 'package:my_doctor/view/screen/home_screen/widgets/search_bar.dart';
+import 'package:my_doctor/view/screen/home_screen/widgets/custom_app_bar.dart';
 import 'package:my_doctor/view/screen/home_screen/widgets/top_rating_doctors.dart';
+import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -27,12 +29,28 @@ class HomePage extends StatelessWidget {
     ScreenSize.init(context);
     final homeController = Get.put(HomeController());
     return Scaffold(
-      backgroundColor: AppColors.lightBlueColor.withAlpha(240),
-      body: SafeArea(
-        child: SingleChildScrollView(
+      bottomNavigationBar: customBottomNavigationBar(
+        navigationFunction: (index) {
+          // handle Navigation
+        },
+      ),
+      backgroundColor: AppColors.lightBlueColor,
+      body: SuperScaffold(
+        transitionBetweenRoutes: true,
+        appBar: buildSearchBar(
+          searchController: homeController.searchController,
+          searchFunction: (value) {
+            // Handle search value change
+          },
+          goToDoctorsPage: () {
+            // Handle Got To doctors
+          },
+          goToFavouritePage: () {
+            // Handle Go To favourite
+          },
+        ),
+        body: SingleChildScrollView(
           child: SizedBox(
-            width: ScreenSize.screenWidth,
-
             child: Obx(
               () => HandlingView(
                 requestState: homeController.requestState.value,
@@ -54,25 +72,10 @@ class HomePage extends StatelessWidget {
                       },
                     ),
 
-                    CustomSearchBar(
-                      filterFunction: () {
-                        // Handle filter
-                      },
-                      searchFunction: () {
-                        // Handle search
-                      },
-                      doctorsFunction: () {
-                        // Handle doctors
-                      },
-                      favouriteFunction: () {
-                        // Handle favourite
-                      },
-                      searchController: homeController.searchController,
-                    ),
-
                     OverViewSection(homeController: homeController),
 
                     TopRatingDoctors(
+                      homeController: homeController,
                       addToFavouriteFunction: () {
                         // Handle add to favourite
                       },
