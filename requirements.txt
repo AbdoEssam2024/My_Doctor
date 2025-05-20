@@ -1,0 +1,8 @@
+fastapi
+sqlalchemy
+pymysql
+python-dotenv
+pyjwt
+bcrypt
+uvicorn
+python-jose[cryptography]
