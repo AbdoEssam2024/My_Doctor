@@ -6,3 +6,5 @@ app = FastAPI()
 app.include_router(
     router=user_router,
 )
+
+print("ana zeheqt")
