@@ -1,5 +1,0 @@
-.env
-.env.example
-db_env
-__pycache__/
-*.py[cod]
