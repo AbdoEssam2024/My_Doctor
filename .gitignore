@@ -4,4 +4,4 @@ __pycache__/
 
 # Virtual environment
 .env/
-db_env/
+doctor_env/
