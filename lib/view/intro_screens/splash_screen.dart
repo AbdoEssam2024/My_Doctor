@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:my_doctor/const/class/screen_size.dart';
 import 'package:my_doctor/const/colors/app_colors.dart';
 import 'package:my_doctor/const/images/app_images.dart';
-import 'package:my_doctor/controller/splash_controller.dart';
+import 'package:my_doctor/const/routes/routes_names.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -11,7 +10,6 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ScreenSize.init(context);
-    final controller = Get.put(SplashController());
     return Scaffold(
       backgroundColor: AppColors.blueColor,
       body: SizedBox.expand(
@@ -29,7 +27,11 @@ class SplashScreen extends StatelessWidget {
                   ),
 
               onEnd: () {
-                controller.goToWelcomeScreen();
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  AppRoutesNames.welcomeScreen,
+                  (route) => false,
+                );
               },
             ),
 

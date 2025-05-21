@@ -1,4 +1,3 @@
-import 'package:get/get_utils/get_utils.dart';
 /// Validates a field based on its type and length constraints.
 ///
 /// This function checks if the provided `val` is non-empty and within the
@@ -38,15 +37,15 @@ validFields({
 
   switch (type) {
     case "mobile":
-      if (!GetUtils.isPhoneNumber(val)) {
-        return "Please enter a valid $fieldName.";
-      }
+      // if (!GetUtils.isPhoneNumber(val)) {
+      //   return "Please enter a valid $fieldName.";
+      // }
       break;
 
     case "email":
-      if (!GetUtils.isEmail(val)) {
-        return "Please enter a valid $fieldName.";
-      }
+      // if (!GetUtils.isEmail(val)) {
+      //   return "Please enter a valid $fieldName.";
+      // }
       break;
 
     case "name":

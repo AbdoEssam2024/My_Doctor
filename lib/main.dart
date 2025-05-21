@@ -1,18 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:my_doctor/const/class/init_binding.dart';
+import 'package:my_doctor/const/app_theme/app_theme.dart';
 import 'package:my_doctor/const/routes/routes.dart';
-import 'package:my_doctor/controller/theme_controller.dart';
-
-late Box userDataBox;
-late Box themeBox;
+import 'package:my_doctor/view/intro_screens/splash_screen.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
-  userDataBox = await Hive.openBox("userData");
-  themeBox = await Hive.openBox("theme");
   runApp(const MyApp());
 }
 
@@ -21,11 +12,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      getPages: routes,
-      theme: ThemeController.initialTheme,
-      initialBinding: InitialBindings(),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.system,
+      home: const SplashScreen(),
+      routes: routes,
     );
   }
 }

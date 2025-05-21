@@ -1,21 +1,18 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:my_doctor/const/class/screen_size.dart';
 import 'package:my_doctor/const/colors/app_colors.dart';
 import 'package:my_doctor/const/functions/pop_func.dart';
 import 'package:my_doctor/const/images/app_images.dart';
-import 'package:my_doctor/controller/splash_controller.dart';
 import 'package:my_doctor/view/core_widgets/custom_btn.dart';
-import 'package:my_doctor/view/core_widgets/pop_widget.dart';
+import 'package:my_doctor/view/intro_screens/pop_widget.dart';
 
-class WelcomeScreen extends GetView<SplashController> {
+class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     ScreenSize.init(context);
-    final controller = Get.put(SplashController());
     return PopScopeWidget(
       popAction: (didPop, res) {
         popFunc(didpop: didPop, result: exit(0));
@@ -66,7 +63,7 @@ class WelcomeScreen extends GetView<SplashController> {
                     btnColor: AppColors.blueColor,
                     text: "Log in",
                     btnFunc: () {
-                      controller.goToLoginScreen();
+                      // controller.goToLoginScreen();
                     },
                   ),
                   CustomBtn(
@@ -74,7 +71,7 @@ class WelcomeScreen extends GetView<SplashController> {
                     textColor: AppColors.blueColor,
                     text: "Sign Up",
                     btnFunc: () {
-                      controller.goToSignUpScreen();
+                      // controller.goToSignUpScreen();
                     },
                   ),
                 ],
