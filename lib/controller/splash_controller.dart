@@ -3,6 +3,8 @@ import 'package:my_doctor/const/routes/routes_names.dart';
 import 'package:my_doctor/main.dart';
 
 class SplashController extends GetxController {
+
+
   goToWelcomeScreen() async {
     userDataBox.put("visit", 0);
     Get.toNamed(AppRoutesNames.welcomePage);

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:my_doctor/main.dart';
@@ -17,6 +18,7 @@ class HomeController extends GetxController {
   int topRatingDoctorsCurrentIndex = 0;
   Rx<RequestState> requestState = RequestState.none.obs;
   Rx<DateTime> timeNow = DateTime.now().obs;
+  late NotchBottomBarController notchBottomBarController;
 
   /// A controller for managing user data and network state in the application.
   ///
@@ -67,6 +69,7 @@ class HomeController extends GetxController {
     searchController = TextEditingController();
     overViewpageController = PageController();
     topRatingpageController = PageController();
+    notchBottomBarController = NotchBottomBarController();
     listenToNetworkChanges();
   }
 
@@ -91,7 +94,7 @@ class HomeController extends GetxController {
   /// [index]: The index of the next view to navigate to.
   overViewNextPage({required int index}) {
     overViewCurrentIndex = index;
-    if (overViewCurrentIndex < availaibleDoctorsData.length ) {
+    if (overViewCurrentIndex < availaibleDoctorsData.length) {
       if (overViewpageController.hasClients) {
         overViewpageController.animateToPage(
           overViewCurrentIndex,

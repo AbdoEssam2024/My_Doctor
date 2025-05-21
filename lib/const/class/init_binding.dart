@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:logging/logging.dart';
 import 'package:my_doctor/const/class/internet_service.dart';
+import 'package:my_doctor/controller/theme_controller.dart';
 import 'package:my_doctor/web_services/api_calls.dart';
 
 class InitialBindings extends Bindings {
@@ -18,6 +19,7 @@ class InitialBindings extends Bindings {
     try {
       _registerDependency<ApiCalls>(() => ApiCalls());
       _registerDependency<InternetService>(() => InternetService());
+      _registerDependency<ThemeController>(() => ThemeController());
     } catch (e) {
       ///If an error occurs during the registration process, it logs the error using a `Logger`.
       _logger.severe('Error initializing dependencies', e);

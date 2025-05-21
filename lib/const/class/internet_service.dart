@@ -1,8 +1,10 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:my_doctor/const/class/request_state.dart';
 import 'package:my_doctor/const/colors/app_colors.dart';
 import 'package:my_doctor/view/core_widgets/custom_snack_bar.dart';
+
 /// A service class that manages internet connectivity status using the
 /// `connectivity_plus` package. It extends `GetxService` to leverage
 /// GetX's service management capabilities.
@@ -22,6 +24,7 @@ import 'package:my_doctor/view/core_widgets/custom_snack_bar.dart';
 class InternetService extends GetxService {
   final Connectivity _connectivity = Connectivity();
   static Rx<RequestState> requestState = RequestState.online.obs;
+  late Box userDataBox;
 
   @override
   void onInit() {
@@ -56,5 +59,10 @@ class InternetService extends GetxService {
         backgroundColor: AppColors.mediumBlueColor,
       );
     }
+  }
+
+  Future<void> initializeHive() async {
+    await Hive.initFlutter();
+    userDataBox = await Hive.openBox("userData");
   }
 }

@@ -5,7 +5,7 @@ import 'package:my_doctor/const/colors/app_colors.dart';
 snackBarWidget({
   required String title,
   required String message,
-  Color? backgroundColor = Colors.red,
+  Color backgroundColor = Colors.red,
 }) {
   Get.snackbar(
     "",

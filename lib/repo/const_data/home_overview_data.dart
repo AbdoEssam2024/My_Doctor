@@ -1,5 +1,6 @@
-import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:my_doctor/const/colors/app_colors.dart';
 import 'package:my_doctor/const/images/app_images.dart';
 import 'package:my_doctor/model/home_models/overview_model.dart';
 import 'package:my_doctor/view/screen/home_screen/widgets/custom_bottom_bar.dart';
@@ -77,15 +78,41 @@ List<TopRatingDoctorsModel> topRatingDoctorsData = [
   ),
 ];
 
-List<TabItem> bottomBarItems = [
-  TabItem(icon: BottomBarItems(icon: Icons.home), isIconBlend: true),
-  TabItem(
-    icon: BottomBarItems(icon: Icons.messenger_outline_outlined),
-    isIconBlend: true,
+List<BottomBarItem> bottomBarItems = [
+  BottomBarItem(
+    itemLabelWidget: Text(
+      "Home",
+      style: TextStyle(color: AppColors.blackColor),
+      textAlign: TextAlign.center,
+    ),
+    activeItem: Icon(Icons.home, size: 30),
+    inActiveItem: Icon(Icons.home, size: 30),
   ),
-  TabItem(icon: BottomBarItems(icon: Icons.person_pin), isIconBlend: true),
-  TabItem(
-    icon: BottomBarItems(icon: Icons.calendar_month_outlined),
-    isIconBlend: true,
+  BottomBarItem(
+    itemLabelWidget: Text(
+      "Chat",
+      style: TextStyle(color: AppColors.blackColor),
+      textAlign: TextAlign.center,
+    ),
+    activeItem: Icon(Icons.messenger_outline_outlined, size: 30),
+    inActiveItem: Icon(Icons.messenger_outline_outlined, size: 30),
   ),
+  BottomBarItem(
+    itemLabelWidget: Text(
+      "Profile",
+      style: TextStyle(color: AppColors.blackColor),
+      textAlign: TextAlign.center,
+    ),
+    activeItem: Icon(Icons.person_pin, size: 30),
+    inActiveItem: Icon(Icons.person_pin, size: 30),
+  ),
+  // BottomBarItem(
+  //   itemLabelWidget: Text(
+  //     "Calendar",
+  //     style: TextStyle(color: AppColors.blackColor),
+  //     textAlign: TextAlign.center,
+  //   ),
+  //   activeItem: Icon(Icons.calendar_month_outlined, size: 30),
+  //   inActiveItem: Icon(Icons.calendar_month_outlined, size: 30),
+  // ),
 ];

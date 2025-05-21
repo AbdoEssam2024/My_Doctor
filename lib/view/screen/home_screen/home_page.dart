@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_doctor/const/app_theme/app_theme.dart';
 import 'package:my_doctor/const/class/screen_size.dart';
-import 'package:my_doctor/const/colors/app_colors.dart';
 import 'package:my_doctor/controller/home_controller.dart';
+import 'package:my_doctor/controller/theme_controller.dart';
 import 'package:my_doctor/view/core_widgets/handling_view.dart';
 import 'package:my_doctor/view/screen/home_screen/widgets/custom_bottom_bar.dart';
 import 'package:my_doctor/view/screen/home_screen/widgets/main_header.dart';
@@ -28,63 +29,80 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     ScreenSize.init(context);
     final homeController = Get.put(HomeController());
-    return Scaffold(
-      bottomNavigationBar: customBottomNavigationBar(
-        navigationFunction: (index) {
-          // handle Navigation
-        },
-      ),
-      backgroundColor: AppColors.lightBlueColor,
-      body: SuperScaffold(
-        transitionBetweenRoutes: true,
-        appBar: buildSearchBar(
-          searchController: homeController.searchController,
-          searchFunction: (value) {
-            // Handle search value change
-          },
-          goToDoctorsPage: () {
-            // Handle Got To doctors
-          },
-          goToFavouritePage: () {
-            // Handle Go To favourite
-          },
+    final themeController = Get.find<ThemeController>();
+    return Obx(
+      () => Scaffold(
+        backgroundColor: themeController.changeThemeColors(
+          dark: AppTheme.darkTheme.scaffoldBackgroundColor,
+          light: AppTheme.lightTheme.scaffoldBackgroundColor,
         ),
-        body: SingleChildScrollView(
-          child: SizedBox(
-            child: Obx(
-              () => HandlingView(
-                requestState: homeController.requestState.value,
-                widget: Column(
-                  children: [
-                    MainHeader(
-                      userName:
-                          homeController.userData[0]!.userName
-                              .toString()
-                              .capitalizeFirst!,
-                      profileTapFunction: () {
-                        // Handle profile tap
-                      },
-                      notificationsFunction: () {
-                        // Handle notifications
-                      },
-                      settingsFunction: () {
-                        // Handle settings
-                      },
-                    ),
+        
+        bottomNavigationBar: customBottomNavigationBar(
+          notchBottomBarController: homeController.notchBottomBarController,
+          navigationFunction: (index) {
+            homeController.notchBottomBarController.jumpTo(index);
+            // handle Navigation
+          },
+          themeController: themeController,
+        ),
+        body: SuperScaffold(
+          transitionBetweenRoutes: true,
 
-                    OverViewSection(homeController: homeController),
+          appBar: buildSearchBar(
+            themeController: themeController,
+            searchController: homeController.searchController,
+            searchFunction: (value) {
+              // Handle search value change
+            },
+            goToDoctorsPage: () {
+              // Handle Got To doctors
+            },
+            goToFavouritePage: () {
+              // Handle Go To favourite
+            },
+          ),
+          body: SingleChildScrollView(
+            child: SizedBox(
+              child: Obx(
+                () => HandlingView(
+                  requestState: homeController.requestState.value,
+                  widget: Column(
+                    children: [
+                      MainHeader(
+                        themeController: themeController,
+                        userName:
+                            homeController.userData[0]!.userName
+                                .toString()
+                                .capitalizeFirst!,
+                        profileTapFunction: () {
+                          // Handle profile tap
+                        },
+                        notificationsFunction: () {
+                          // Handle notifications
+                        },
+                        settingsFunction: () {
+                          // Handle settings
+                        },
+                      ),
 
-                    TopRatingDoctors(
-                      homeController: homeController,
-                      addToFavouriteFunction: () {
-                        // Handle add to favourite
-                      },
+                      OverViewSection(
+                        homeController: homeController,
+                        themeController: themeController,
+                      ),
 
-                      reviewDoctorFunction: () {
-                        // Handle review doctor
-                      },
-                    ),
-                  ],
+                      TopRatingDoctors(
+                        homeController: homeController,
+                        themeController: themeController,
+                        addToFavouriteFunction: () {
+                          // Handle add to favourite
+                        },
+
+                        reviewDoctorFunction: () {
+                          // Handle review doctor
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
