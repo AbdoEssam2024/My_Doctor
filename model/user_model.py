@@ -11,4 +11,5 @@ class User(Base):
     password = Column(String(60))
     token = Column(String(60))
     token_expires = Column(DateTime)
-    
+    verify_code = Column(Integer , nullable=False)
+    verified = Column(Integer , default=0 , nullable=False)

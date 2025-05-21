@@ -17,5 +17,5 @@ class UpdateRequest(BaseModel):
     email: str | None = None
 
 
-class DeleteRequest(BaseModel):
-    user_id: int
+class VerifyRequest(BaseModel):
+    code: int

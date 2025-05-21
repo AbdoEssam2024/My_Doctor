@@ -6,6 +6,7 @@ from jose import jwt
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 import os
+import random
 
 load_dotenv()
 
@@ -26,6 +27,7 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode.update({"exp": expire})
 
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
     return encoded_jwt
 
 
@@ -46,7 +48,7 @@ def verify_token(request: Request):
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
     except Exception as e:
-        raise HTTPException(status_code=401, detail=str(e))
+        raise HTTPException(status_code=401, detail=f"Invalid token {e}")
 
 
 # Login
@@ -57,11 +59,12 @@ def login(email: str, password: str):
         if check_password(password, user.password):
             session.close()
             access_token = create_access_token({"sub": user.email})
-            if (user.token != access_token or user.token is None):
+            if user.token != access_token or user.token is None:
                 update_user(user_id=user.id)
 
             response_data = {
                 "status": "success",
+                "user_id": user.id,
                 "name": user.username,
                 "email": user.email,
                 "token": access_token,
@@ -72,24 +75,27 @@ def login(email: str, password: str):
             return response_data
         else:
             session.close()
-            return {"status": "error", "error": "Invalid password"}
+            return {"status": "error", "message": "Invalid password"}
     session.close()
-    return {"status": "error", "error": "User not found"}
+    return {"status": "error", "message": "User not found"}
 
 
 # Register
 def register(username: str, password: str, email: str):
     access_token = create_access_token({"sub": email})
+    code = random.randint(100000, 999999)
     exist_user = session.query(User).filter(User.email == email).first()
     if exist_user:
         session.close()
-        return {"status": "error", "error": "User already exists"}
+        return {"status": "error", "message": "User already exists"}
     user = User(
         username=username,
         password=password,
         email=email,
         token=access_token,
         token_expires=ACCESS_TOKEN_EXPIRE,
+        verify_code=code,
+        verified=0,
     )
     session.add(user)
     session.commit()
@@ -98,6 +104,7 @@ def register(username: str, password: str, email: str):
     return {
         "status": "success",
         "message": "User registered successfully",
+        "user_id": user.id,
         "token": access_token,
         "token_expires": ACCESS_TOKEN_EXPIRE,
     }
@@ -112,7 +119,7 @@ def delete_user(user_id: int):
         session.close()
         return {"status": "success", "message": "User deleted successfully"}
     session.close()
-    return {"status": "error", "error": "User not found"}
+    return {"status": "error", "message": "User not found"}
 
 
 # Update User
@@ -127,14 +134,23 @@ def update_user(
 
         if not user:
             session.close()
-            return {"status": "error", "error": "User not found"}
+            return {"status": "error", "message": "User not found"}
 
-        if username is not None:
-            user.username = username
-        if password is not None:
-            user.password = password
-        if email is not None:
-            user.email = email
+        elif (
+            username == user.username
+            and password == user.password
+            and email == user.email
+        ):
+            session.close()
+            return {"status": "error", "message": "No Changes to update"}
+
+        else:
+            if username is not None:
+                user.username = username
+            if password is not None:
+                user.password = password
+            if email is not None:
+                user.email = email
 
         response_data = {
             "status": "success",
@@ -149,16 +165,28 @@ def update_user(
         return response_data
     except Exception as e:
         session.rollback()
-        return {"status": "error", "error": str(e)}
+        return {"status": "error", "message": str(e)}
     finally:
-        print("Worked")
         session.close()
 
 
+# Verify User
+def verify_user(user_id: int, code: int):
+    user = session.query(User).filter(User.id == user_id).first()
+    if user:
+        if user.verify_code == code:
+            user.verified = 1
+            session.commit()
+            session.close()
+            return {"status": "success", "message": "User verified successfully"}
+        session.close()
+        return {"status": "error", "message": "Invalid verification code"}
+    session.close()
+    return {"status": "error", "message": "User not found"}
+
+
 # Get User Info
-def get_user(
-    user_id: int
-):
+def get_user(user_id: int):
     user = session.query(User).filter(User.id == user_id).first()
     if user:
         response_data = {
@@ -170,4 +198,4 @@ def get_user(
         session.close()
         return response_data
     session.close()
-    return {"status": "error", "error": "User not found"}
+    return {"status": "error", "message": "User not found"}

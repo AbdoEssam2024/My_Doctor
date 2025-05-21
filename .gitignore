@@ -3,5 +3,5 @@ __pycache__/
 *.py[cod]
 
 # Virtual environment
-.env/
+.env
 doctor_env/
