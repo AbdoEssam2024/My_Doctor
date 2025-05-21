@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:my_doctor/const/app_theme/app_theme.dart';
 import 'package:my_doctor/const/routes/routes.dart';
-import 'package:my_doctor/view/intro_screens/splash_screen.dart';
+import 'package:my_doctor/const/class/app_initializer.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AppInitializer.init();
   runApp(const MyApp());
 }
 
@@ -17,7 +19,6 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      home: const SplashScreen(),
       routes: routes,
     );
   }

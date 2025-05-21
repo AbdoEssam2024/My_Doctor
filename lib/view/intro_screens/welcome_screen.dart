@@ -4,8 +4,9 @@ import 'package:my_doctor/const/class/screen_size.dart';
 import 'package:my_doctor/const/colors/app_colors.dart';
 import 'package:my_doctor/const/functions/pop_func.dart';
 import 'package:my_doctor/const/images/app_images.dart';
+import 'package:my_doctor/const/routes/routes_names.dart';
 import 'package:my_doctor/view/core_widgets/custom_btn.dart';
-import 'package:my_doctor/view/intro_screens/pop_widget.dart';
+import 'package:my_doctor/view/core_widgets/pop_widget.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -62,17 +63,13 @@ class WelcomeScreen extends StatelessWidget {
                   CustomBtn(
                     btnColor: AppColors.blueColor,
                     text: "Log in",
-                    btnFunc: () {
-                      // controller.goToLoginScreen();
-                    },
+                    btnFunc: () => Navigator.pushNamed(context, AppRoutesNames.loginScreen),
                   ),
                   CustomBtn(
                     btnColor: AppColors.whiteColor,
                     textColor: AppColors.blueColor,
                     text: "Sign Up",
-                    btnFunc: () {
-                      // controller.goToSignUpScreen();
-                    },
+                    btnFunc: () => Navigator.pushNamed(context, AppRoutesNames.signupScreen),
                   ),
                 ],
               ),
