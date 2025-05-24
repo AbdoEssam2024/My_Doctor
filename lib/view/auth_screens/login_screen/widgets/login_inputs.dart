@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_doctor/const/class/screen_size.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:my_doctor/const/app_theme/text_styles.dart';
 import 'package:my_doctor/const/colors/app_colors.dart';
 import 'package:my_doctor/const/functions/field_valid.dart';
 import 'package:my_doctor/controller/login_controller/login_cubit.dart';
@@ -13,7 +14,7 @@ Widget loginInputs({
   required void Function() forgetPwFunc,
 }) {
   return Column(
-    spacing: ScreenSize.screenWidth! * 0.1,
+    spacing: 30.h,
     children: [
       CustomFormField(
         validator: (val) {
@@ -28,11 +29,6 @@ Widget loginInputs({
         controller: emailController,
         hintText: "Enter Your Email",
         labelText: "Email",
-        fieldIcon: Icon(
-          Icons.alternate_email,
-          size: 35,
-          color: AppColors.blueColor,
-        ),
       ),
       BlocBuilder<LoginCubit, LoginState>(
         builder:
@@ -50,36 +46,30 @@ Widget loginInputs({
               controller: passwordController,
               hintText: "Enter Your Password",
               labelText: "Password",
-              fieldIcon: IconButton(
-                onPressed: () {
-                  context.read<LoginCubit>().toggleShowPass();
-                },
-                icon:
-                    state.showPass
-                        ? Icon(
-                          Icons.visibility_off_outlined,
-                          size: 35,
-                          color: AppColors.blueColor,
-                        )
-                        : Icon(
-                          Icons.visibility_outlined,
-                          size: 35,
-                          color: AppColors.blueColor,
-                        ),
+              fieldIcon: GestureDetector(
+                onTap: () => context.read<LoginCubit>().toggleShowPass(),
+                child: Icon(
+                  state.showPass
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
+                  size: 25,
+                  color:
+                      state.showPass
+                          ? AppColors.greyColor
+                          : AppColors.blueColor,
+                ),
               ),
             ),
       ),
 
       Container(
         alignment: Alignment.centerRight,
-        width: ScreenSize.screenWidth,
+        width: double.infinity,
         child: TextButton(
           onPressed: forgetPwFunc,
           child: Text(
             "Forget Password",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
+            style: TextStyles.font14Wieght400Grey!.copyWith(
               color: AppColors.blueColor,
             ),
           ),

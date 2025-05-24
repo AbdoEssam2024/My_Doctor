@@ -1,19 +1,18 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:my_doctor/const/class/screen_size.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:my_doctor/const/app_theme/text_styles.dart';
 import 'package:my_doctor/const/colors/app_colors.dart';
 import 'package:my_doctor/const/functions/pop_func.dart';
 import 'package:my_doctor/const/images/app_images.dart';
-import 'package:my_doctor/const/routes/routes_names.dart';
-import 'package:my_doctor/view/core_widgets/custom_btn.dart';
 import 'package:my_doctor/view/core_widgets/pop_widget.dart';
+import 'package:my_doctor/view/intro_screens/welcome_screen_widgets/welcome_buttons.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    ScreenSize.init(context);
     return PopScopeWidget(
       popAction: (didPop, res) {
         popFunc(didpop: didPop, result: exit(0));
@@ -21,59 +20,109 @@ class WelcomeScreen extends StatelessWidget {
 
       childWidget: Scaffold(
         backgroundColor: AppColors.whiteColor,
-        body: Container(
-          margin: EdgeInsets.only(top: ScreenSize.screenWidth! * 0.3),
-          width: ScreenSize.screenWidth,
-          child: Column(
-            spacing: ScreenSize.screenWidth! * 0.3,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                spacing: ScreenSize.screenWidth! * 0.09,
-                children: [
-                  Image.asset(AppImages.welcomeLogo),
-                  Text(
-                    "MyDoctor",
-                    style: TextStyle(
-                      color: AppColors.blueColor,
-                      fontSize: 40,
-                      fontWeight: FontWeight.w700,
+        body: SafeArea(
+          child: SizedBox.expand(
+            child: Stack(
+              children: [
+                TweenAnimationBuilder(
+                  tween: Tween<Alignment>(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                  duration: Duration(seconds: 2),
+                  builder: (context, value, child) => Container(
+                    alignment: Alignment.topLeft,
+                    width: double.infinity,
+                    height: 180.h,
+                    foregroundDecoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          AppColors.blueColor.withAlpha(100),
+                          AppColors.whiteColor.withAlpha(100),
+                        ],
+                        begin: Alignment.topCenter,
+                        end: value,
+                        stops: [0.2, 0.9],
+                      ),
                     ),
                   ),
-                ],
-              ),
-              Column(
-                spacing: ScreenSize.screenWidth! * 0.05,
-                children: [
-                  Padding(
+                ),
+
+                Positioned(
+                  top: 60.h,
+                  right: 0,
+                  left: 0,
+                  child: Image.asset(AppImages.welcomeLogo),
+                ),
+
+                Positioned(
+                  bottom: 320.h,
+                  right: 0,
+                  left: 0,
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    "Find Trust Doctors",
+                    style: TextStyles.font28Wieght500Blue,
+                  ),
+                ),
+
+                Positioned(
+                  bottom: 220.h,
+                  right: 0,
+                  left: 0,
+                  child: Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: ScreenSize.screenWidth! * 0.1,
+                      vertical: 20.h,
+                      horizontal: 40.w,
                     ),
                     child: Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
-                      style: TextStyle(
-                        color: AppColors.blackColor,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                      ),
                       textAlign: TextAlign.center,
+                      "Manage and schedule all of your medical appointments easily with Docdoc to get a new experience.",
+                      style: TextStyles.font28Wieght500Blue!.copyWith(
+                        fontSize: 14.sp,
+                        height: 1.5.h,
+                        color: AppColors.blackColor,
+                      ),
                     ),
                   ),
+                ),
+                Positioned(
+                  bottom: 110.h,
+                  right: 0,
+                  left: 0,
+                  child: WelcomeButtons(),
+                ),
 
-                  CustomBtn(
-                    btnColor: AppColors.blueColor,
-                    text: "Log in",
-                    btnFunc: () => Navigator.pushNamed(context, AppRoutesNames.loginScreen),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  left: 0,
+                  child: TweenAnimationBuilder(
+                    curve: Curves.easeInOut,
+                    tween: Tween<Alignment>(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                    ),
+                    duration: Duration(seconds: 2),
+                    builder: (context, value, child) => Container(
+                      width: double.infinity,
+                      height: 120.h,
+                      foregroundDecoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            AppColors.blueColor.withAlpha(100),
+                            AppColors.whiteColor.withAlpha(100),
+                          ],
+                          begin: Alignment.bottomCenter,
+                          end: value,
+                          stops: [0.2, 0.9],
+                        ),
+                      ),
+                    ),
                   ),
-                  CustomBtn(
-                    btnColor: AppColors.whiteColor,
-                    textColor: AppColors.blueColor,
-                    text: "Sign Up",
-                    btnFunc: () => Navigator.pushNamed(context, AppRoutesNames.signupScreen),
-                  ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

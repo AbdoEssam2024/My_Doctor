@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:my_doctor/const/api_links/auth_api.dart';
 import 'package:my_doctor/model/user_data_model.dart';
 import 'package:my_doctor/web_services/dio_config.dart';
@@ -21,13 +22,32 @@ class LoginRepo {
               data.map((user) => UserDataModel.fromJson(user)).toList();
           return userData;
         } else {
-          return response.data['message'];
+          return ApiException(
+            message: response.data['message'],
+            statusCode: response.statusCode,
+            data: response.data,
+          );
         }
       } else {
-        throw ApiException(message: 'Login failed');
+        return ApiException(
+          message: response.data['message'],
+          statusCode: response.statusCode,
+          data: response.data,
+        );
       }
     } catch (e) {
-      throw ApiException(message: 'Login failed');
+      String message = "An unexpected error occurred";
+      if (e is DioException) {
+        if (e.error is ApiException) {
+          message = (e.error as ApiException).message;
+        } else if (e.response?.data is Map<String, dynamic>) {
+          message = e.response?.data['message'] ?? e.message ?? message;
+        }
+        return ApiException(message: message);
+      } else if (e is ApiException) {
+        message = e.message;
+      }
+      return ApiException(message: message);
     }
   }
 }

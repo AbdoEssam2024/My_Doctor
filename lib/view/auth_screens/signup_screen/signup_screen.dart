@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_doctor/const/class/screen_size.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:my_doctor/const/colors/app_colors.dart';
+import 'package:my_doctor/const/functions/navigation_extenstion.dart';
 import 'package:my_doctor/const/functions/pop_func.dart';
-import 'package:my_doctor/controller/signup_controller/signup_cubit.dart';
+import 'package:my_doctor/const/routes/routes_names.dart';
 import 'package:my_doctor/view/auth_screens/signup_screen/widgets/signup_actions.dart';
 import 'package:my_doctor/view/auth_screens/signup_screen/widgets/signup_inputs.dart';
 import 'package:my_doctor/view/core_widgets/pop_widget.dart';
@@ -23,9 +23,9 @@ class _SignupScreenState extends State<SignupScreen> {
   late TextEditingController mobileController;
   late TextEditingController birthController;
   late TextEditingController genderController;
+  late TextEditingController ageController;
 
-  @override
-  void initState() {
+  initControllers() {
     formKey = GlobalKey<FormState>();
     nameController = TextEditingController();
     emailController = TextEditingController();
@@ -33,17 +33,28 @@ class _SignupScreenState extends State<SignupScreen> {
     mobileController = TextEditingController();
     birthController = TextEditingController();
     genderController = TextEditingController();
-    super.initState();
+    ageController = TextEditingController();
   }
 
-  @override
-  void dispose() {
+  disposeControllers() {
     nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
     mobileController.dispose();
     birthController.dispose();
     genderController.dispose();
+    ageController.dispose();
+  }
+
+  @override
+  void initState() {
+    initControllers();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    disposeControllers();
     super.dispose();
   }
 
@@ -53,12 +64,19 @@ class _SignupScreenState extends State<SignupScreen> {
       popAction: (didPop, res) {
         popFunc(
           didpop: didPop,
-          result: () => context.read<SignupCubit>().goToLoginPage(context),
+          result: () => context.pushNameAndRemove(routeName: AppRoutesNames.loginScreen),
         );
       },
       childWidget: Scaffold(
         appBar: AppBar(
-          toolbarHeight: ScreenSize.screenWidth! * 0.25,
+          leading: GestureDetector(
+            onTap: () => context.pushNameAndRemove(routeName: AppRoutesNames.loginScreen),
+            child: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: AppColors.blueColor,
+            ),
+          ),
+          toolbarHeight: 100.h,
           centerTitle: true,
           title: Text(
             "New Account",
@@ -72,14 +90,12 @@ class _SignupScreenState extends State<SignupScreen> {
 
         body: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: ScreenSize.screenWidth! * 0.05,
-            ),
-            width: ScreenSize.screenWidth,
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            width: double.infinity,
             child: Form(
               key: formKey,
               child: Column(
-                spacing: ScreenSize.screenHeight! * 0.1,
+                spacing: 50.h,
                 children: [
                   signupInputs(
                     nameController: nameController,
@@ -87,12 +103,14 @@ class _SignupScreenState extends State<SignupScreen> {
                     passwordController: passwordController,
                     mobileController: mobileController,
                     genderController: genderController,
+                    ageController: ageController,
                   ),
 
                   signupActions(
                     goToLogin:
-                        () =>
-                            context.read<SignupCubit>().goToLoginPage(context),
+                        () => context.pushNameAndRemove(
+                          routeName: AppRoutesNames.loginScreen,
+                        ),
 
                     signUpFunc: () {
                       // Handle Sign Up Function

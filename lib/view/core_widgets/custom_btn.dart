@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_doctor/const/class/screen_size.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomBtn extends StatelessWidget {
   final String text;
@@ -19,14 +19,14 @@ class CustomBtn extends StatelessWidget {
     return MaterialButton(
       elevation: 0,
       padding: EdgeInsets.symmetric(
-        vertical: ScreenSize.screenWidth! * 0.03,
-        horizontal: ScreenSize.screenWidth! * 0.2,
+        vertical: 10.h,
+        horizontal: 20.w,
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
       color: btnColor,
       textColor: textColor,
       onPressed: btnFunc,
-      child: Text(text, style: TextStyle(fontSize: 24)),
+      child: Text(text, style: TextStyle(fontSize: 16.sp)),
     );
   }
 }

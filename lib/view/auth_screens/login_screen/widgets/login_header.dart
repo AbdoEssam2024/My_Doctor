@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:my_doctor/const/colors/app_colors.dart';
+import 'package:my_doctor/const/app_theme/text_styles.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Widget loginHeader() {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
+    spacing: 10.h,
     children: [
       Text(
         "Welcome",
-        style: TextStyle(
-          fontSize: 30,
-          color: AppColors.blueColor,
-          fontWeight: FontWeight.w600,
-        ),
+        style: TextStyles.font28Wieght500Blue,
       ),
       Text(
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+        "Manage and schedule all of your medical appointments easily with Docdoc to get a new experience.",
+        style: TextStyles.font14Wieght400Grey,
       ),
     ],
   );

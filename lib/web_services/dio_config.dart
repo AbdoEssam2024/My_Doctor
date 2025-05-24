@@ -53,59 +53,126 @@ class DioClient {
             // Handle different status codes
             switch (error.response?.statusCode) {
               case 400:
-                throw ApiException(
-                  message: 'Bad Request',
-                  statusCode: 400,
-                  data: error.response?.data,
+                return handler.reject(
+                  DioException(
+                    requestOptions: error.requestOptions,
+                    response: error.response,
+                    error: ApiException(
+                      message: 'Bad Request',
+                      statusCode: 400,
+                      data: error.response?.data,
+                    ),
+                  ),
                 );
               case 401:
                 // Handle unauthorized (e.g., refresh token)
-                throw ApiException(
-                  message: 'Unauthorized',
-                  statusCode: 401,
-                  data: error.response?.data,
+                return handler.reject(
+                  DioException(
+                    requestOptions: error.requestOptions,
+                    response: error.response,
+                    error: ApiException(
+                      message: 'Unauthorized',
+                      statusCode: 401,
+                      data: error.response?.data,
+                    ),
+                  ),
                 );
               case 403:
-                throw ApiException(
-                  message: 'Forbidden',
-                  statusCode: 403,
-                  data: error.response?.data,
+                return handler.reject(
+                  DioException(
+                    requestOptions: error.requestOptions,
+                    response: error.response,
+                    error: ApiException(
+                      message: 'Forbidden',
+                      statusCode: 403,
+                      data: error.response?.data,
+                    ),
+                  ),
                 );
               case 404:
-                throw ApiException(
-                  message: 'Not Found',
-                  statusCode: 404,
-                  data: error.response?.data,
+                return handler.reject(
+                  DioException(
+                    requestOptions: error.requestOptions,
+                    response: error.response,
+                    error: ApiException(
+                      message: 'Not Found',
+                      statusCode: 404,
+                      data: error.response?.data,
+                    ),
+                  ),
                 );
               case 429:
-                throw ApiException(
-                  message: 'Too Many Requests',
-                  statusCode: 429,
-                  data: error.response?.data,
+                return handler.reject(
+                  DioException(
+                    requestOptions: error.requestOptions,
+                    response: error.response,
+                    error: ApiException(
+                      message: 'Too Many Requests',
+                      statusCode: 429,
+                      data: error.response?.data,
+                    ),
+                  ),
                 );
               case 500:
-                throw ApiException(
-                  message: 'Internal Server Error',
-                  statusCode: 500,
-                  data: error.response?.data,
+                return handler.reject(
+                  DioException(
+                    requestOptions: error.requestOptions,
+                    response: error.response,
+                    error: ApiException(
+                      message: 'Internal Server Error',
+                      statusCode: 500,
+                      data: error.response?.data,
+                    ),
+                  ),
                 );
               default:
-                throw ApiException(
-                  message: 'An error occurred',
-                  statusCode: error.response?.statusCode,
-                  data: error.response?.data,
+                return handler.reject(
+                  DioException(
+                    requestOptions: error.requestOptions,
+                    response: error.response,
+                    error: ApiException(
+                      message: 'An error occurred',
+                      statusCode: error.response?.statusCode,
+                      data: error.response?.data,
+                    ),
+                  ),
                 );
             }
           } else if (error.type == DioExceptionType.connectionTimeout) {
-            throw ApiException(message: 'Connection timeout');
+            return handler.reject(
+              DioException(
+                requestOptions: error.requestOptions,
+                error: ApiException(message: 'Connection timeout'),
+              ),
+            );
           } else if (error.type == DioExceptionType.receiveTimeout) {
-            throw ApiException(message: 'Receive timeout');
+            return handler.reject(
+              DioException(
+                requestOptions: error.requestOptions,
+                error: ApiException(message: 'Receive timeout'),
+              ),
+            );
           } else if (error.type == DioExceptionType.sendTimeout) {
-            throw ApiException(message: 'Send timeout');
+            return handler.reject(
+              DioException(
+                requestOptions: error.requestOptions,
+                error: ApiException(message: 'Send timeout'),
+              ),
+            );
           } else if (error.error.toString().contains('SocketException')) {
-            throw ApiException(message: 'No internet connection');
+            return handler.reject(
+              DioException(
+                requestOptions: error.requestOptions,
+                error: ApiException(message: 'No internet connection'),
+              ),
+            );
           } else {
-            throw ApiException(message: 'An unexpected error occurred');
+            return handler.reject(
+              DioException(
+                requestOptions: error.requestOptions,
+                error: ApiException(message: 'An unexpected error occurred'),
+              ),
+            );
           }
         },
       ),

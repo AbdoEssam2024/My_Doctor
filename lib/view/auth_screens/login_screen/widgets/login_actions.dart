@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_doctor/const/class/screen_size.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:my_doctor/const/app_theme/text_styles.dart';
 import 'package:my_doctor/const/colors/app_colors.dart';
 import 'package:my_doctor/controller/login_controller/login_cubit.dart';
 import 'package:my_doctor/view/core_widgets/custom_btn.dart';
@@ -11,9 +12,10 @@ Widget loginActions({
   required TextEditingController emailController,
   required TextEditingController passwordController,
   required void Function() goToSignUp,
+  required void Function() fingerPrintFunc,
 }) {
   return Column(
-    spacing: ScreenSize.screenWidth! * 0.05,
+    spacing: 20.h,
     children: [
       CustomBtn(
         btnColor: AppColors.blueColor,
@@ -39,7 +41,7 @@ Widget loginActions({
           ),
           Text(
             "Or",
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+            style: TextStyles.font18Wieght600Blue,
           ),
           Expanded(
             child: Divider(
@@ -51,22 +53,24 @@ Widget loginActions({
         ],
       ),
 
+      GestureDetector(
+        onTap: fingerPrintFunc,
+
+        child: Icon(Icons.fingerprint, size: 50, color: AppColors.blueColor),
+      ),
+
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             "Don't Have Account ?",
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+            style: TextStyles.font14Wieght400Grey,
           ),
           TextButton(
             onPressed: goToSignUp,
             child: Text(
               "Sign Up",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-                color: AppColors.blueColor,
-              ),
+              style:  TextStyles.font18Wieght600Blue,
             ),
           ),
         ],

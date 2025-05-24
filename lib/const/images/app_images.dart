@@ -5,6 +5,7 @@ class AppImages {
   static String splashPath = "assets/images/splash/";
   static String splashLogo = "${splashPath}splash_logo.png";
   static String welcomeLogo = "${splashPath}welcome_logo.png";
+  static String welcomeBackground = "${splashPath}welcome_background.png";
 
   static String authPath = "assets/images/auth/";
   static String success = "${authPath}success.png";

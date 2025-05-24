@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:my_doctor/const/app_theme/text_styles.dart';
 import 'package:my_doctor/const/colors/app_colors.dart';
-import 'package:my_doctor/const/class/screen_size.dart';
 import 'package:my_doctor/view/core_widgets/custom_btn.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Widget signupActions({required void Function() goToLogin ,required void Function() signUpFunc}) {
   return Column(
-    spacing: ScreenSize.screenWidth! * 0.05,
+    spacing: 30.h,
     children: [
       CustomBtn(
         btnColor: AppColors.blueColor,
@@ -24,7 +25,7 @@ Widget signupActions({required void Function() goToLogin ,required void Function
           ),
           Text(
             "Or",
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+            style: TextStyles.font18Wieght600Blue,
           ),
           Expanded(
             child: Divider(
@@ -41,17 +42,13 @@ Widget signupActions({required void Function() goToLogin ,required void Function
         children: [
           Text(
             "Already Have Account ?",
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+            style: TextStyles.font14Wieght400Grey,
           ),
           TextButton(
             onPressed: goToLogin,
             child: Text(
               "Log In",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-                color: AppColors.blueColor,
-              ),
+              style: TextStyles.font18Wieght600Blue,
             ),
           ),
         ],

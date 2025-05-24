@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_doctor/const/class/screen_size.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:my_doctor/const/app_theme/text_styles.dart';
 import 'package:my_doctor/const/colors/app_colors.dart';
 import 'package:my_doctor/const/functions/field_valid.dart';
 import 'package:my_doctor/controller/signup_controller/signup_cubit.dart';
@@ -13,9 +14,10 @@ Widget signupInputs({
   required TextEditingController passwordController,
   required TextEditingController mobileController,
   required TextEditingController genderController,
+  required TextEditingController ageController,
 }) {
   return Column(
-    spacing: ScreenSize.screenHeight! * 0.05,
+    spacing: 30.h,
     children: [
       CustomFormField(
         validator: (val) {
@@ -30,11 +32,7 @@ Widget signupInputs({
         controller: nameController,
         hintText: "Enter Your Name",
         labelText: "Full Name",
-        fieldIcon: Icon(
-          Icons.person_2_outlined,
-          size: 35,
-          color: AppColors.blueColor,
-        ),
+        textType: TextInputType.name,
       ),
       CustomFormField(
         validator: (val) {
@@ -49,42 +47,7 @@ Widget signupInputs({
         controller: emailController,
         hintText: "Enter Your Email",
         labelText: "Email",
-        fieldIcon: Icon(
-          Icons.alternate_email,
-          size: 35,
-          color: AppColors.blueColor,
-        ),
-      ),
-      BlocBuilder<SignupCubit, SignupState>(
-        builder:
-            (context, state) => CustomFormField(
-              secureText: state.showPass,
-              validator: (val) {
-                return validFields(
-                  val: val!,
-                  type: "password",
-                  fieldName: "Password",
-                  maxVal: 30,
-                  minVal: 6,
-                );
-              },
-              controller: passwordController,
-              hintText: "Enter Your Password",
-              labelText: "Password",
-              fieldIcon: IconButton(
-                onPressed: () {
-                  context.read<SignupCubit>().toggleShowPass();
-                },
-                icon:
-                    state.showPass
-                        ? Icon(Icons.visibility_off_outlined, size: 35 , color: AppColors.blueColor)
-                        : Icon(
-                          Icons.visibility_outlined,
-                          size: 35,
-                          color: AppColors.blueColor,
-                        ),
-              ),
-            ),
+        textType: TextInputType.emailAddress,
       ),
 
       CustomFormField(
@@ -101,11 +64,22 @@ Widget signupInputs({
         textType: TextInputType.phone,
         hintText: "Enter Your Mobile Number",
         labelText: "Mobile Number",
-        fieldIcon: Icon(
-          Icons.phone_android,
-          size: 35,
-          color: AppColors.blueColor,
-        ),
+      ),
+
+      CustomFormField(
+        validator: (val) {
+          return validFields(
+            val: val!,
+            type: "age",
+            fieldName: "Age",
+            maxVal: 3,
+            minVal: 1,
+          );
+        },
+        controller: ageController,
+        textType: TextInputType.number,
+        hintText: "Enter Your Age",
+        labelText: "Age",
       ),
 
       DropdownButtonFormField<String>(
@@ -115,7 +89,7 @@ Widget signupInputs({
                 .map(
                   (gender) => DropdownMenuItem<String>(
                     value: gender,
-                    child: Text(gender),
+                    child: Text(gender, style: TextStyles.font14Wieght400Grey),
                   ),
                 )
                 .toList(),
@@ -123,23 +97,8 @@ Widget signupInputs({
           genderController.text = value!;
         },
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: ScreenSize.screenWidth! * 0.02,
-          ),
-          label: Text(
-            "Gender",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: AppColors.blackColor,
-            ),
-          ),
-
-          suffixIcon: Icon(
-            Icons.transgender,
-            size: 35,
-            color: AppColors.blueColor,
-          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 10.w),
+          label: Text("Gender", style: TextStyles.font14Wieght400Grey),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: AppColors.blueColor, width: 2),
           ),
@@ -153,6 +112,38 @@ Widget signupInputs({
             minVal: 4,
           );
         },
+      ),
+
+      BlocBuilder<SignupCubit, SignupState>(
+        builder:
+            (context, state) => CustomFormField(
+              secureText: state.showPass,
+              validator: (val) {
+                return validFields(
+                  val: val!,
+                  type: "password",
+                  fieldName: "Password",
+                  maxVal: 30,
+                  minVal: 6,
+                );
+              },
+              controller: passwordController,
+              hintText: "Enter Your Password",
+              labelText: "Password",
+              fieldIcon: GestureDetector(
+                onTap: () => context.read<SignupCubit>().toggleShowPass(),
+                child: Icon(
+                  state.showPass
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
+                  size: 25,
+                  color:
+                      state.showPass
+                          ? AppColors.greyColor
+                          : AppColors.blueColor,
+                ),
+              ),
+            ),
       ),
     ],
   );
